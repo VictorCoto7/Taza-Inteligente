@@ -1,7 +1,4 @@
 
-
-
-
 #include <HX711.h>
 #include <ESP8266WiFi.h>
 #include <ThingSpeak.h>
@@ -30,11 +27,6 @@ float zero_factor = 154619;
 
 void setup() 
 {
-
-
-
-
-
   Serial.begin(9600);  //preparar el puerto serie
 
   long zero_factorx = hx711.read_average(); //Get a baseline reading
