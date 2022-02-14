@@ -10,15 +10,18 @@ unsigned long channelID = *******; //canal de thingspeak
 const char* WriteAPIKey = "***********"; //apiKey de thingspeak
 
 WiFiClient cliente;
-
-const byte PIN_DATOS = 5;  //D1 //amarillo
-const byte PIN_RELOJ = 4;  //D2 //verde
+const byte PIN_VCCHX711= 13; //D7
+const byte PIN_DATOS = 5;    //D1 //amarillo
+const byte PIN_RELOJ = 4;    //D2 //verde
  
 HX711 hx711(PIN_DATOS,PIN_RELOJ);
+
+ 
+int rbutton = D4; // this button will be used to reset the scale to 0.
 float valor;
 float kilos;
 float anterior = 0;
-float calibration_factor = 1030853; 
+float calibration_factor = 1030853; // for me this vlaue works just perfect more or less
 float zero_factor = 154619;
 //float peso_conocido = 658.0;
 //=============================================================================================
@@ -27,8 +30,14 @@ float zero_factor = 154619;
 
 void setup() 
 {
-  Serial.begin(9600);  //preparar el puerto serie
 
+  pinMode(PIN_VCCHX711, OUTPUT);
+  pinMode(rbutton, INPUT_PULLUP); 
+
+
+  Serial.begin(9600);  //preparar el puerto serie
+  digitalWrite(PIN_VCCHX711, HIGH);
+  delay(500);
   long zero_factorx = hx711.read_average(); //Get a baseline reading
   hx711.set_offset(zero_factor);
   Serial.print("zero_factorx: ");
@@ -63,6 +72,12 @@ void setup()
   Serial.println(" g");
   Serial.println();
   
+  if ( digitalRead(rbutton) == LOW)
+{
+  hx711.set_scale();
+  hx711.tare(); //Reset the scale to 0
+}
+
 //if((anterior-valor)<=-25 ||(anterior-valor)>=25){
   ThingSpeak.setField (1,valor);
   ThingSpeak.writeFields(channelID,WriteAPIKey);
@@ -70,7 +85,6 @@ void setup()
   anterior = valor;
   delay(14000);
 //}
-
 
 ESP.deepSleep(15e6);
 
