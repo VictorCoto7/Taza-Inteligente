@@ -14,10 +14,10 @@ RTC_DATA_ATTR int Veces_Ejecutado = 0;
 ////////////////////////////////////////////////////////
 //conectarse a wifi y thingspeak
 ////////////////////////////////////////////////////////
-const char* ssid = "Aquaris V_a90243";
+const char* ssid = "a90243";
 const char* password = "123456789";
-unsigned long channelID = 1315227;
-const char* WriteAPIKey = "ZQK3B4XOCQKZG7TG";
+unsigned long channelID = ******;
+const char* WriteAPIKey = "*******";
 
 WiFiClient cliente;
 
